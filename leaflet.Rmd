@@ -1,0 +1,25 @@
+---
+title: "Leaflet Test"
+author: "Anna Lyamkina"
+date: "5 5 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+library(dplyr)
+```
+
+## Bavarian cities with population
+
+
+
+```{r map}
+de <- read.csv('de.csv') # data from https://simplemaps.com/data/de-cities
+bayern <- de %>% filter(admin_name == "Bavaria") %>% select(city, lat, lng, population)
+
+                  
+leaflet(bayern) %>% addTiles() %>% addCircleMarkers(~lng, ~lat, popup = ~as.character(population), label = ~city, clusterOptions = markerClusterOptions(), radius = ~population/1000, color = ~ifelse(population > 100000, "red", "blue"))
+```
+
